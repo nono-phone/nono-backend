@@ -3,7 +3,6 @@ package com.vn.aptech.smartphone.security.refresh;
 import com.vn.aptech.smartphone.security.TokenProvider;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
@@ -30,8 +30,6 @@ public class RefreshTokenProvider implements TokenProvider {
     @Value("${core.auth.refresh.expirationInMs}")
     private long refreshExpirationInMs;
 
-
-   // private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     @Override
     public String generateToken(Authentication authentication) {
         //validate object authentication
@@ -54,7 +52,7 @@ public class RefreshTokenProvider implements TokenProvider {
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .setIssuer(issuer)
-                .signWith(SignatureAlgorithm.HS512, getRefreshSecretKey())
+                .signWith(getRefreshSecretKey(), SignatureAlgorithm.HS512)
                 .compact();
     }
 
@@ -63,8 +61,9 @@ public class RefreshTokenProvider implements TokenProvider {
         return new Date(now.getTime() + this.refreshExpirationInMs);
     }
 
-    private byte[] getRefreshSecretKey() {
-        return Base64.getDecoder().decode(this.refreshSecretKey);
+    private Key getRefreshSecretKey() {
+        byte [] refreshSecretKeyDecode = Base64.getDecoder().decode(this.refreshSecretKey);
+        return new SecretKeySpec(refreshSecretKeyDecode, "HmacSHA512");
     }
 
 }

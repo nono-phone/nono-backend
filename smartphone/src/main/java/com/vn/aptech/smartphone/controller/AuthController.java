@@ -46,7 +46,7 @@ public class AuthController {
     }
 
     @DeleteMapping("/logout")
-    @PreAuthorize("hasAuthority('USER') or hasRole('USER')")
+    @PreAuthorize("hasAuthority('ROLE_USER') or hasRole('USER')")
     public ResponseEntity<Void> logout(@UserPrincipal UserDetails currentUser,
                                        @RequestHeader(HttpHeaders.AUTHORIZATION)  String refreshToken) {
         authService.logout(currentUser, refreshToken);

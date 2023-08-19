@@ -34,7 +34,6 @@ public class AccessTokenProvider implements TokenProvider {
     @Value("${core.auth.access.expirationInMs}")
     private long accessExpirationInMs;
 
-    //private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.RS384);
     @Override
     public String generateToken(Authentication authentication) {
         validate(authentication);
@@ -56,7 +55,7 @@ public class AccessTokenProvider implements TokenProvider {
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .setIssuer(issuer)
-                .signWith(SignatureAlgorithm.RS256, getAccessPrivateKey())
+                .signWith(getAccessPrivateKey(), SignatureAlgorithm.RS256)
                 .compact();
     }
 
