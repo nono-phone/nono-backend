@@ -1,6 +1,8 @@
 package com.vn.aptech.smartphone.service.Impl;
 
 import com.vn.aptech.smartphone.entity.Category;
+import com.vn.aptech.smartphone.exception.NotFoundException;
+import com.vn.aptech.smartphone.exception.ConflictException;
 import com.vn.aptech.smartphone.repository.CategoryRepository;
 import com.vn.aptech.smartphone.service.ICategoryService;
 import lombok.RequiredArgsConstructor;
@@ -20,18 +22,18 @@ public class CategoryServiceImpl implements ICategoryService {
     }
 
     @Override
-    public Category add(Category categories) throws Exception {
-        if (checkDuplicate(categories.getName())) {
-            return repository.save(categories);
+    public Category add(Category category) throws Exception {
+        if (checkDuplicate(category.getName())) {
+            return repository.save(category);
         } else {
-            throw new Exception("Duplicate category name");
+            throw new ConflictException("Duplicate category name");
         }
     }
 
-    @Override
-    public Optional<Category> add1(Category categories) {
-        return repository.findByName(categories.getName());
-    }
+//    @Override
+//    public Optional<Category> add1(Category categories) {
+//        return repository.findByName(categories.getName());
+//    }
 
     @Override
     public Category update() {
@@ -41,13 +43,21 @@ public class CategoryServiceImpl implements ICategoryService {
     @Override
     public void delete(Long id) {
         if (repository.findById(id).isPresent()) {
-            repository.delete(getById(id).get());
+            repository.deleteById(id);
         }
     }
 
     @Override
-    public Optional<Category> getById(Long id) {
-        return repository.findById(id);
+    public Category getById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("Not found category with id = %d", id)));
+    }
+
+    @Override
+    public List<Category> getByParentId(Long id) {
+        return repository.findCategoriesByIdParentCate(id)
+                .orElseThrow(() -> new NotFoundException(String.format("Not found category with id = %d", id)));
     }
 
     private boolean checkDuplicate(String name) {

@@ -30,7 +30,7 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public List<Product> getByCate(Long idCate) {
-        return productRepository.findByCategories(iCategoryService.getById(idCate).get());
+        return productRepository.findByCategories(iCategoryService.getById(idCate));
     }
 
     @Override

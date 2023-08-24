@@ -36,7 +36,6 @@ public class AuthenticationEvents {
             UserDetails principal = (UserDetails) userAuthentication.getPrincipal();
             resetLoginAttempt(principal.getUsername());
         }
-        log.info("onSuccess(AuthenticationSuccessEvent");
         log.info("onSuccess(AuthenticationSuccessEvent{}", authentication);
     }
 
@@ -48,7 +47,6 @@ public class AuthenticationEvents {
         }
         // ...
 
-        log.info("onSuccess(AuthenticationSuccessEvent");
         log.info("onSuccess(AuthenticationSuccessEvent{}", authentication);
     }
 

@@ -8,6 +8,7 @@ package com.vn.aptech.smartphone.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vn.aptech.smartphone.common.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.io.Serializable;
@@ -39,6 +40,15 @@ public class SafeguardUser extends BaseEntity implements Serializable {
     @JsonIgnore
     @Column(name = "password", length = 60, nullable = false)
     private String password;
+
+    private String phone;
+    @Column(name = "date_of_birth")
+    private String dateOfBirth;
+    private String gender;
+    private String image;
+    @NotNull
+    private Boolean status;
+    private String name;
 }
 
 

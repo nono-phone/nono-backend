@@ -1,4 +1,9 @@
 package com.vn.aptech.smartphone.service;
 
-public class UserService {
+import com.vn.aptech.smartphone.entity.payload.request.InfoPayload;
+import org.springframework.security.core.userdetails.UserDetails;
+
+public interface UserService {
+    void update(UserDetails userDetails, InfoPayload infoPayload);
+
 }

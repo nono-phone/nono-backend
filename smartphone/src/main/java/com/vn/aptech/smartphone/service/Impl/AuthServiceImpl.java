@@ -17,6 +17,7 @@ import com.vn.aptech.smartphone.repository.LoginAttemptRepository;
 import com.vn.aptech.smartphone.security.access.AccessTokenProvider;
 import com.vn.aptech.smartphone.security.refresh.RefreshTokenProvider;
 import com.vn.aptech.smartphone.service.AuthService;
+import jakarta.validation.Payload;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,6 +61,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthenticationResponse login(LoginPayload loginPayload) {
         validateLoginAttempt(loginPayload.getEmail());
+        validateStatusUser(loginPayload);
         var authenticationToken = new UsernamePasswordAuthenticationToken(loginPayload.getEmail(), loginPayload.getPassword());
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -95,6 +97,7 @@ public class AuthServiceImpl implements AuthService {
         user.setEmail(register.getEmail());
         user.setPassword(passwordEncoder.encode(register.getPassword()));
         user.setRole(Role.USER);
+        user.setStatus(true);
         return user;
     }
 
@@ -117,6 +120,13 @@ public class AuthServiceImpl implements AuthService {
         Instant expirationDate = new Date().toInstant().plus(refreshExpirationInMs, ChronoUnit.MILLIS);
         blackListRefreshToken.setExpirationDate(expirationDate);
         return blackListRefreshToken;
+    }
+
+    private void validateStatusUser(LoginPayload loginPayload) {
+        var user = userRepository.findByEmail(loginPayload.getEmail());
+        if(user.isPresent() && !user.get().getStatus()) {
+            throw new LoginFailedException(String.format("%s account is disabled", loginPayload.getEmail()));
+        }
     }
 
 

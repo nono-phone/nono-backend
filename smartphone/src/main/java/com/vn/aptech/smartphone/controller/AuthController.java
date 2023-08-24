@@ -40,13 +40,13 @@ public class AuthController {
     }
 
     @GetMapping(value = "/refresh", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @PreAuthorize("hasAuthority('USER') or hasRole('USER')")
+    @PreAuthorize("hasAuthority('ROLE_REFRESH') or hasRole('REFRESH')")
     public ResponseEntity<RefreshTokenResponse> refresh() {
         return ResponseEntity.ok(authService.refresh());
     }
 
     @DeleteMapping("/logout")
-    @PreAuthorize("hasAuthority('ROLE_USER') or hasRole('USER')")
+    @PreAuthorize("hasAuthority('ROLE_REFRESH') or hasRole('REFRESH')")
     public ResponseEntity<Void> logout(@UserPrincipal UserDetails currentUser,
                                        @RequestHeader(HttpHeaders.AUTHORIZATION)  String refreshToken) {
         authService.logout(currentUser, refreshToken);

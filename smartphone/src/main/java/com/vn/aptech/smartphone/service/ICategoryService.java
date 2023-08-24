@@ -8,8 +8,10 @@ import java.util.Optional;
 public interface ICategoryService {
     List<Category> get();
     Category add(Category categories) throws Exception;
-    Optional<Category> add1(Category categories);
+//    Optional<Category> add1(Category categories);
     Category update();
     void delete(Long id);
-    Optional<Category> getById(Long id);
+    Category getById(Long id);
+
+    List<Category> getByParentId(Long id);
 }

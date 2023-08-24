@@ -1,8 +1,6 @@
 package com.vn.aptech.smartphone.config;
 
 import com.vn.aptech.smartphone.security.CustomUnauthorizedEntryPoint;
-import com.vn.aptech.smartphone.security.UserDetailsCustom;
-import com.vn.aptech.smartphone.security.UserDetailsServiceCustom;
 import com.vn.aptech.smartphone.security.access.AccessAuthenticationFilter;
 import com.vn.aptech.smartphone.security.refresh.RefreshAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +8,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
-import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.CachingUserDetailsService;
@@ -32,8 +28,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.context.NullSecurityContextRepository;
-import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
@@ -42,7 +36,6 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final UserDetailsServiceCustom userDetailsServiceCustom;
     @Bean
     public SecurityFilterChain authorizeFilterChain(HttpSecurity http) throws Exception {
         // @formatter:off
@@ -97,10 +90,10 @@ public class SecurityConfig {
 
     @Bean
     @ConditionalOnMissingBean(DaoAuthenticationProvider.class)
-    public DaoAuthenticationProvider authProvider(UserDetailsServiceCustom userDetailsServiceCustom) {
-        CachingUserDetailsService cachingUserService = new CachingUserDetailsService(userDetailsServiceCustom);
+    public DaoAuthenticationProvider authProvider(UserDetailsService userDetailsService) {
+        CachingUserDetailsService cachingUserService = new CachingUserDetailsService(userDetailsService);
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsServiceCustom);
+        authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
