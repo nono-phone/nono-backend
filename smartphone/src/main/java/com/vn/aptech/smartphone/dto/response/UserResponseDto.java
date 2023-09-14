@@ -13,18 +13,18 @@ import java.util.List;
 @Getter
 @ToString
 @NoArgsConstructor
-public class UserResponse {
+public class UserResponseDto {
     private Long id;
     private String email;
     private Role role;
 
-    public UserResponse(SafeguardUser appUser) {
-        this.id = appUser.getId();
-        this.email = appUser.getEmail();
-        this.role = appUser.getRole();
-    }
+//    public UserResponseDto(SafeguardUser appUser) {
+//        this.id = appUser.getId();
+//        this.email = appUser.getEmail();
+//        this.role = appUser.getRole();
+//    }
 
-    public static List<UserResponse> buildFromUsers(List<SafeguardUser> appUsers) {
-        return appUsers.stream().map(UserResponse::new).toList();
-    }
+//    public static List<UserResponseDto> buildFromUsers(List<SafeguardUser> appUsers) {
+//        return appUsers.stream().map(UserResponseDto::new).toList();
+//    }
 }

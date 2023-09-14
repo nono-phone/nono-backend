@@ -3,7 +3,7 @@ package com.vn.aptech.smartphone.service.Impl;
 import com.vn.aptech.smartphone.common.Role;
 import com.vn.aptech.smartphone.dto.UserLoginDto;
 import com.vn.aptech.smartphone.dto.response.RefreshTokenResponse;
-import com.vn.aptech.smartphone.dto.response.UserResponse;
+import com.vn.aptech.smartphone.dto.response.UserResponseDto;
 import com.vn.aptech.smartphone.entity.BlackListRefreshToken;
 import com.vn.aptech.smartphone.entity.LoginAttempt;
 import com.vn.aptech.smartphone.entity.SafeguardUser;
@@ -17,7 +17,7 @@ import com.vn.aptech.smartphone.repository.LoginAttemptRepository;
 import com.vn.aptech.smartphone.repository.UserRepository;
 import com.vn.aptech.smartphone.security.access.AccessTokenProvider;
 import com.vn.aptech.smartphone.security.refresh.RefreshTokenProvider;
-import com.vn.aptech.smartphone.service.AuthService;
+import com.vn.aptech.smartphone.service.IAuthService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -37,7 +37,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class AuthServiceImpl implements AuthService {
+public class AuthServiceImpl implements IAuthService {
     private final AuthenticationManager authenticationManager;
     private final LoginAttemptRepository loginAttemptRepository;
     private final RefreshTokenProvider refreshTokenProvider;
@@ -52,12 +52,13 @@ public class AuthServiceImpl implements AuthService {
     private long refreshExpirationInMs;
 
     @Override
-    public UserResponse register(RegisterPayload registerPayload) {
+    public UserResponseDto register(RegisterPayload registerPayload) {
         checkConflictUserEmail(registerPayload.getEmail());
         SafeguardUser safeguardUser = createSafeguardUser(registerPayload);
         SafeguardUser saved = userRepository.save(safeguardUser);
         cleanLoginAttempt(registerPayload.getEmail());
-        return new UserResponse(saved);
+
+        return modelMapper.map(saved, UserResponseDto.class);
     }
 
     @Override

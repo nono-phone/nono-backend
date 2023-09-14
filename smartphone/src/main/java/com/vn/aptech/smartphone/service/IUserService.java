@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
-public interface UserService {
+public interface IUserService {
     void update(UserDetails userDetails, InfoPayload infoPayload);
     List<SafeguardUser> getAll();
 }
