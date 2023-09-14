@@ -1,6 +1,7 @@
 package com.vn.aptech.smartphone.controller;
 
 import com.vn.aptech.smartphone.annotation.UserPrincipal;
+import com.vn.aptech.smartphone.entity.SafeguardUser;
 import com.vn.aptech.smartphone.entity.payload.request.InfoPayload;
 import com.vn.aptech.smartphone.service.UserService;
 import jakarta.validation.Valid;
@@ -8,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/user")
@@ -20,6 +23,11 @@ public class UserController {
                                      @RequestBody @Valid InfoPayload infoPayload) {
         userService.update(currentUser, infoPayload);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/get-all")
+    public ResponseEntity<List<SafeguardUser>> get(){
+        return ResponseEntity.ok(userService.getAll());
     }
     //add user
 

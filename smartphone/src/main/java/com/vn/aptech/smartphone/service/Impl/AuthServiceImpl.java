@@ -1,25 +1,26 @@
 package com.vn.aptech.smartphone.service.Impl;
 
 import com.vn.aptech.smartphone.common.Role;
+import com.vn.aptech.smartphone.dto.UserLoginDto;
 import com.vn.aptech.smartphone.dto.response.RefreshTokenResponse;
 import com.vn.aptech.smartphone.dto.response.UserResponse;
 import com.vn.aptech.smartphone.entity.BlackListRefreshToken;
 import com.vn.aptech.smartphone.entity.LoginAttempt;
 import com.vn.aptech.smartphone.entity.SafeguardUser;
-import com.vn.aptech.smartphone.repository.UserRepository;
 import com.vn.aptech.smartphone.entity.payload.request.LoginPayload;
 import com.vn.aptech.smartphone.entity.payload.request.RegisterPayload;
-import com.vn.aptech.smartphone.entity.payload.response.AuthenticationResponse;
 import com.vn.aptech.smartphone.exception.ConflictException;
 import com.vn.aptech.smartphone.exception.LoginFailedException;
+import com.vn.aptech.smartphone.exception.NotFoundException;
 import com.vn.aptech.smartphone.repository.BlackListRefreshTokenRepository;
 import com.vn.aptech.smartphone.repository.LoginAttemptRepository;
+import com.vn.aptech.smartphone.repository.UserRepository;
 import com.vn.aptech.smartphone.security.access.AccessTokenProvider;
 import com.vn.aptech.smartphone.security.refresh.RefreshTokenProvider;
 import com.vn.aptech.smartphone.service.AuthService;
-import jakarta.validation.Payload;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,6 +43,7 @@ public class AuthServiceImpl implements AuthService {
     private final RefreshTokenProvider refreshTokenProvider;
     private final AccessTokenProvider accessTokenProvider;
     private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
     private final UserRepository userRepository;
     private final BlackListRefreshTokenRepository blackListRefreshTokenRepository;
@@ -59,7 +61,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthenticationResponse login(LoginPayload loginPayload) {
+    public UserLoginDto login(LoginPayload loginPayload) {
         validateLoginAttempt(loginPayload.getEmail());
         validateStatusUser(loginPayload);
         var authenticationToken = new UsernamePasswordAuthenticationToken(loginPayload.getEmail(), loginPayload.getPassword());
@@ -67,10 +69,11 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String refreshToken = refreshTokenProvider.generateToken(authentication);
         String accessToken = accessTokenProvider.generateToken(authentication);
-        return AuthenticationResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
+        var user = getInfoUser(loginPayload);
+        UserLoginDto userDto = modelMapper.map(user, UserLoginDto.class);
+        userDto.setAccessToken(accessToken);
+        userDto.setRefreshToken(refreshToken);
+        return userDto;
     }
 
     @Override
@@ -124,10 +127,14 @@ public class AuthServiceImpl implements AuthService {
 
     private void validateStatusUser(LoginPayload loginPayload) {
         var user = userRepository.findByEmail(loginPayload.getEmail());
-        if(user.isPresent() && !user.get().getStatus()) {
+        if (user.isPresent() && !user.get().getStatus()) {
             throw new LoginFailedException(String.format("%s account is disabled", loginPayload.getEmail()));
         }
     }
 
+    private SafeguardUser getInfoUser(LoginPayload loginPayload) {
+        return userRepository.findByEmail(loginPayload.getEmail()).orElseThrow(() ->
+                new NotFoundException(String.format("%s user not exits", loginPayload.getEmail())));
+    }
 
 }

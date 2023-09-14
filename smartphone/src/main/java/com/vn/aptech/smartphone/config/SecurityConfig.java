@@ -4,6 +4,7 @@ import com.vn.aptech.smartphone.security.CustomUnauthorizedEntryPoint;
 import com.vn.aptech.smartphone.security.access.AccessAuthenticationFilter;
 import com.vn.aptech.smartphone.security.refresh.RefreshAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +31,11 @@ import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -44,13 +50,13 @@ public class SecurityConfig {
         requestCache.setMatchingRequestParameterName("continue");
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                //.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 //https://docs.spring.io/spring-security/reference/servlet/authentication/session-management.html
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .requestCache(cache -> cache.requestCache(requestCache))
                 .anonymous(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/user/get-all").permitAll()
                         .requestMatchers("/auth/register", "/auth/login").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -70,22 +76,22 @@ public class SecurityConfig {
         return http.build();
     }
 
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//
-//        CorsConfiguration config = new CorsConfiguration();
-//        config.setAllowedOrigins(List.of("*"));
-//        config.setAllowedOriginPatterns(List.of("*"));
-//        config.setAllowedHeaders(List.of("Content-Type", "X-Frame-Options", "X-XSS-Protection",
-//                "X-Content-Type-Options", "Strict-Transport-Security", "Authorization"));
-//        config.setAllowedMethods(List.of("OPTIONS", "GET", "POST", "PUT", "DELETE"));
-//        config.setExposedHeaders(List.of("ERROR_CODE"));
-//        config.setAllowCredentials(false);
-//        config.setMaxAge(3600L);
-//        source.registerCorsConfiguration("/**", config);
-//        return source;
-//    }
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("*"));
+        config.setAllowedOriginPatterns(List.of("*"));
+        config.setAllowedHeaders(List.of("Content-Type", "X-Frame-Options", "X-XSS-Protection",
+                "X-Content-Type-Options", "Strict-Transport-Security", "Authorization"));
+        config.setAllowedMethods(List.of("OPTIONS", "GET", "POST", "PUT", "DELETE"));
+        config.setExposedHeaders(List.of("ERROR_CODE"));
+        config.setAllowCredentials(false);
+        config.setMaxAge(3600L);
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
 
 
     @Bean
@@ -97,6 +103,7 @@ public class SecurityConfig {
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
+
     @Bean
     public AuthenticationManager authenticationManagerBean(HttpSecurity http,
                                                            UserDetailsService userDetailsService,
@@ -108,6 +115,7 @@ public class SecurityConfig {
         }
         return sharedObject.build();
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -122,16 +130,21 @@ public class SecurityConfig {
     }
 
 
-//    @Bean
+    //    @Bean
 //    public MethodSecurityExpressionHandler expressionHandler() {
 //        var expressionHandler = new DefaultMethodSecurityExpressionHandler();
 //        expressionHandler.setPermissionEvaluator(new ResourceOwnerEvaluator());
 //        return expressionHandler;
 //    }
-@Bean
-public HttpSessionEventPublisher httpSessionEventPublisher() {
-    return new HttpSessionEventPublisher();
-}
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
+    }
 
     @Bean
     public AuthenticationEntryPoint unauthorizedHandler() {

@@ -23,15 +23,11 @@ import java.io.Serializable;
 @Entity
 @Table(name = "safeguard_user")
 public class SafeguardUser extends BaseEntity implements Serializable {
-
-//    @Column(name = "username")
-//    private String username;
-
-  //  @Schema(example = "registered@dqtri.com")
+    //  @Schema(example = "registered@dqtri.com")
     @Column(name = "email", length = 320, nullable = false, unique = true)
     private String email;
 
-   // @Schema(example = "SUBMITTER")
+    // @Schema(example = "SUBMITTER")
     @Enumerated(EnumType.STRING)
     @Column(name = "role", length = 25, nullable = false)
     private Role role;
