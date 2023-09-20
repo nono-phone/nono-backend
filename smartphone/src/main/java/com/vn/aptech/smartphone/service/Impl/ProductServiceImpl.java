@@ -2,8 +2,8 @@ package com.vn.aptech.smartphone.service.Impl;
 
 import com.vn.aptech.smartphone.entity.Product;
 import com.vn.aptech.smartphone.repository.ProductRepository;
-import com.vn.aptech.smartphone.service.ICategoryService;
-import com.vn.aptech.smartphone.service.IProductService;
+import com.vn.aptech.smartphone.service.CategoryService;
+import com.vn.aptech.smartphone.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +12,11 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ProductServiceImpl implements IProductService {
+public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
-    private final ICategoryService iCategoryService;
+    private final CategoryService categoryService;
 
     @Override
     public List<Product> get() {
@@ -30,7 +30,7 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public List<Product> getByCate(Long idCate) {
-        return productRepository.findByCategories(iCategoryService.getById(idCate));
+        return productRepository.findByCategories(categoryService.getById(idCate));
     }
 
     @Override

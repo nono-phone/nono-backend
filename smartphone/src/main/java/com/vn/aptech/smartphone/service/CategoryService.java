@@ -3,9 +3,8 @@ package com.vn.aptech.smartphone.service;
 import com.vn.aptech.smartphone.entity.Category;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface ICategoryService {
+public interface CategoryService {
     List<Category> get();
     Category add(Category categories) throws Exception;
 //    Optional<Category> add1(Category categories);

@@ -1,13 +1,13 @@
 package com.vn.aptech.smartphone.controller;
 
 import com.vn.aptech.smartphone.entity.Category;
-import com.vn.aptech.smartphone.service.ICategoryService;
+import com.vn.aptech.smartphone.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
@@ -16,7 +16,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 @RequestMapping("/category")
 public class CategoryController {
 
-    private final ICategoryService categoryService;
+    private final CategoryService categoryService;
 
     @GetMapping("/")
     public ResponseEntity<List<Category>> get() {
@@ -24,6 +24,7 @@ public class CategoryController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Category> add(@RequestBody Category category) throws Exception {
         return new ResponseEntity<>(categoryService.add(category), CREATED);
     }
@@ -34,6 +35,7 @@ public class CategoryController {
     }
 
     @DeleteMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteCate(@RequestParam Long id) {
         categoryService.delete(id);
     }

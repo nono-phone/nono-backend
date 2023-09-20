@@ -17,7 +17,7 @@ import com.vn.aptech.smartphone.repository.LoginAttemptRepository;
 import com.vn.aptech.smartphone.repository.UserRepository;
 import com.vn.aptech.smartphone.security.access.AccessTokenProvider;
 import com.vn.aptech.smartphone.security.refresh.RefreshTokenProvider;
-import com.vn.aptech.smartphone.service.IAuthService;
+import com.vn.aptech.smartphone.service.AuthService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -37,7 +37,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class AuthServiceImpl implements IAuthService {
+public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final LoginAttemptRepository loginAttemptRepository;
     private final RefreshTokenProvider refreshTokenProvider;
@@ -90,7 +90,7 @@ public class AuthServiceImpl implements IAuthService {
         blackListRefreshTokenRepository.save(token);
     }
 
-    private void checkConflictUserEmail(String email) {
+    private void checkConflictUserEmail(String email) throws ConflictException {
         if (userRepository.existsByEmail(email)) {
             throw new ConflictException(String.format("%s is already in use", email));
         }
@@ -126,7 +126,7 @@ public class AuthServiceImpl implements IAuthService {
         return blackListRefreshToken;
     }
 
-    private void validateStatusUser(LoginPayload loginPayload) {
+    private void validateStatusUser(LoginPayload loginPayload) throws LoginFailedException {
         var user = userRepository.findByEmail(loginPayload.getEmail());
         if (user.isPresent() && !user.get().getStatus()) {
             throw new LoginFailedException(String.format("%s account is disabled", loginPayload.getEmail()));

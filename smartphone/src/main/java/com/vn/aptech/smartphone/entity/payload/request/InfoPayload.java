@@ -14,5 +14,4 @@ public class InfoPayload {
     private String gender;
     @JsonProperty(value = "data_of_birth")
     private String dateOfBirth;
-
 }

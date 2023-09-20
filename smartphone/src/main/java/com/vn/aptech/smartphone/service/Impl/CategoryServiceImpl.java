@@ -4,16 +4,15 @@ import com.vn.aptech.smartphone.entity.Category;
 import com.vn.aptech.smartphone.exception.NotFoundException;
 import com.vn.aptech.smartphone.exception.ConflictException;
 import com.vn.aptech.smartphone.repository.CategoryRepository;
-import com.vn.aptech.smartphone.service.ICategoryService;
+import com.vn.aptech.smartphone.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class CategoryServiceImpl implements ICategoryService {
+public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository repository;
 
     @Override

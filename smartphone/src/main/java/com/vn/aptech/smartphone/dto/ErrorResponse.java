@@ -3,6 +3,8 @@ package com.vn.aptech.smartphone.dto;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 
+import java.time.LocalDateTime;
+
 @Setter
 @Getter
 @ToString
@@ -10,6 +12,8 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public class ErrorResponse {
     //@Schema(example = "4xx ClientError")
-    private HttpStatus status;
+    private LocalDateTime timestamp;
     private String message;
+    private String path;
+    private HttpStatus errorCode;
 }

@@ -5,7 +5,7 @@ import com.vn.aptech.smartphone.entity.Product;
 import java.util.List;
 import java.util.Optional;
 
-public interface IProductService {
+public interface ProductService {
     List<Product> get();
     Optional<Product> getById(Long id);
     List<Product> getByCate(Long idCate);

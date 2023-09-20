@@ -1,10 +1,11 @@
 package com.vn.aptech.smartphone.controller;
 
 import com.vn.aptech.smartphone.entity.Product;
-import com.vn.aptech.smartphone.service.IProductService;
+import com.vn.aptech.smartphone.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +19,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RequiredArgsConstructor
 public class ProductController {
 
-    private final IProductService productService;
+    private final ProductService productService;
 
     @GetMapping
     public ResponseEntity<List<Product>> get(){
@@ -36,6 +37,7 @@ public class ProductController {
 //    }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Product> create(@RequestBody @Valid Product product) {
         return new ResponseEntity<>(productService.add(product), CREATED);
     }

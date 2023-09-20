@@ -7,7 +7,7 @@ import com.vn.aptech.smartphone.entity.payload.request.LoginPayload;
 import com.vn.aptech.smartphone.entity.payload.request.RegisterPayload;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public interface IAuthService {
+public interface AuthService {
     UserResponseDto register(RegisterPayload registerPayload);
 
     UserLoginDto login(LoginPayload loginPayload);
