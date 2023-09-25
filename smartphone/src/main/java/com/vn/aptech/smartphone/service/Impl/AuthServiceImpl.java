@@ -101,6 +101,12 @@ public class AuthServiceImpl implements AuthService {
         user.setEmail(register.getEmail());
         user.setPassword(passwordEncoder.encode(register.getPassword()));
         user.setRole(Role.USER);
+        if(register.getName() == null || register.getName().isEmpty()) {
+            String [] str = register.getEmail().split("@");
+            user.setName(str[0]);
+        }else {
+            user.setName(register.getName());
+        }
         user.setStatus(true);
         return user;
     }

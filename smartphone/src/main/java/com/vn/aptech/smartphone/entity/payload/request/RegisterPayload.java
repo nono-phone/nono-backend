@@ -17,8 +17,6 @@ public class RegisterPayload {
     @NotNull
     //@Schema(example = "mango@dqtri.com")
     private String email;
-
-    @NotNull
     private String name;
     @NotBlank
     @Length(min = 5, max = 24)

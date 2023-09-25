@@ -45,6 +45,9 @@ public class SafeguardUser extends BaseEntity implements Serializable {
     @NotNull
     private Boolean status;
     private String name;
+//
+//    @OneToOne(mappedBy = "user")
+//    private Invoice invoice;
 }
 
 
