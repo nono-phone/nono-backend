@@ -8,6 +8,7 @@ import com.vn.aptech.smartphone.entity.payload.request.ResetPasswordPayload;
 import com.vn.aptech.smartphone.entity.payload.request.UpdateRolePayload;
 import com.vn.aptech.smartphone.security.AppUserDetails;
 import com.vn.aptech.smartphone.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,15 +25,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    @SecurityRequirement(name = "access_token")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/get-all")
     public ResponseEntity<List<UserDto>> get(){
         return new ResponseEntity<>(userService.getAll(), HttpStatus.OK);
     }
+    @SecurityRequirement(name = "access_token")
     @GetMapping
     public ResponseEntity<UserDto> getById (@RequestParam(name = "id") Long idUser) {
         return new ResponseEntity<>(userService.getById(idUser), HttpStatus.OK);
     }
+
+    @SecurityRequirement(name = "access_token")
     @PutMapping(value = "/update-info")
     public ResponseEntity<UserDto> updateInfo(@UserPrincipal UserDetails currentUser,
                                      @RequestBody @Valid InfoPayload infoPayload) {
@@ -56,6 +61,7 @@ public class UserController {
 //        return new ResponseEntity<>(userService.updateUser(userDto), HttpStatus.OK);
 //    }
 
+    @SecurityRequirement(name = "access_token")
     @GetMapping("/me")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> getMyProfiles(@UserPrincipal AppUserDetails currentUser) {
@@ -65,12 +71,16 @@ public class UserController {
         }
         return ResponseEntity.noContent().build();
     }
+
+    @SecurityRequirement(name = "access_token")
     @PutMapping(value = "/disable-user")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDto> updateUser(@RequestParam(name = "id") Long idUser) {
         userService.disableUser(idUser);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @SecurityRequirement(name = "access_token")
     @PutMapping("{userId}/password")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> updateUserPassword(@PathVariable("userId") Long userId,
@@ -78,6 +88,8 @@ public class UserController {
         userService.updatePasswordUser(userId, payload);
         return ResponseEntity.ok().build();
     }
+
+    @SecurityRequirement(name = "access_token")
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("{userId}")
     public ResponseEntity<UserDto> updateRoleUser(@PathVariable("userId") Long userId,
