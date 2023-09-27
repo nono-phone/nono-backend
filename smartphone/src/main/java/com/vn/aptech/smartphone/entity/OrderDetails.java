@@ -1,6 +1,7 @@
 package com.vn.aptech.smartphone.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,12 +18,14 @@ public class OrderDetails extends BaseEntity {
 
     private int quantity;
     private double price;
+    private double amount;
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
 
     @ManyToOne
+    @JsonProperty(value = "product_id")
     @JoinColumn(name = "product_id")
     private Product product;
 }

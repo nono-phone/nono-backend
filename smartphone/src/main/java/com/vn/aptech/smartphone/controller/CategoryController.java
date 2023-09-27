@@ -1,6 +1,5 @@
 package com.vn.aptech.smartphone.controller;
 
-import com.vn.aptech.smartphone.dto.response.UserResponseDto;
 import com.vn.aptech.smartphone.entity.Category;
 import com.vn.aptech.smartphone.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -50,6 +50,11 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<Category> getById(@RequestParam Long id) {
         return ResponseEntity.ok(categoryService.getById(id));
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("{id}")
+    public ResponseEntity<Category> updateCate(@RequestBody Category category, @PathVariable Long id) {
+        return new ResponseEntity<>(categoryService.update(category, id), HttpStatus.OK);
     }
 
     @SecurityRequirement(name = "access_token")

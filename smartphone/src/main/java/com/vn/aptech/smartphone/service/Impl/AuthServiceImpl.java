@@ -2,8 +2,8 @@ package com.vn.aptech.smartphone.service.Impl;
 
 import com.vn.aptech.smartphone.common.Role;
 import com.vn.aptech.smartphone.dto.UserLoginDto;
-import com.vn.aptech.smartphone.dto.response.RefreshTokenResponse;
-import com.vn.aptech.smartphone.dto.response.UserResponseDto;
+import com.vn.aptech.smartphone.dto.RefreshTokenResponse;
+import com.vn.aptech.smartphone.dto.UserResponseDto;
 import com.vn.aptech.smartphone.entity.BlackListRefreshToken;
 import com.vn.aptech.smartphone.entity.LoginAttempt;
 import com.vn.aptech.smartphone.entity.SafeguardUser;

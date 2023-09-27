@@ -1,4 +1,4 @@
-package com.vn.aptech.smartphone.dto.response;
+package com.vn.aptech.smartphone.dto;
 
 import com.vn.aptech.smartphone.common.Role;
 import com.vn.aptech.smartphone.entity.SafeguardUser;

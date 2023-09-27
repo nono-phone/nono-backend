@@ -22,21 +22,34 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category add(Category category) throws Exception {
-        if (checkDuplicate(category.getName())) {
-            return repository.save(category);
-        } else {
-            throw new ConflictException("Duplicate category name");
-        }
+        checkDuplicate(category.getName());
+        return repository.save(category);
     }
 
-//    @Override
-//    public Optional<Category> add1(Category categories) {
-//        return repository.findByName(categories.getName());
-//    }
-
     @Override
-    public Category update() {
-        return null;
+    public Category update(Category category, Long id) {
+        return repository.findById(id)
+                .map(cate -> {
+                    if (category.getName() != null) {
+                        checkDuplicate(category.getName());
+                        cate.setName(category.getName());
+                    }
+                    if (category.getIdParentCate() != null) {
+                        cate.setIdParentCate(category.getIdParentCate());
+                    }
+                    if (category.getDescription() != null) {
+                        cate.setDescription(category.getDescription());
+                    }
+                    if (category.getImage() != null) {
+                        cate.setImage(category.getImage());
+                    }
+                    if (category.isEnable()) {
+                        cate.setEnable(category.isEnable());
+                    }
+                    return repository.save(cate);
+                })
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("Not found category with id = %d", id)));
     }
 
     @Override
@@ -59,7 +72,9 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() -> new NotFoundException(String.format("Not found category with id = %d", id)));
     }
 
-    private boolean checkDuplicate(String name) {
-        return repository.findByName(name).isEmpty();
+    private void checkDuplicate(String name) {
+        if(repository.findByName(name).isPresent()) {
+            throw new ConflictException("Duplicate category name");
+        }
     }
 }

@@ -12,36 +12,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@SecurityScheme(
-		name = "refresh_token",
-		scheme = "Bearer",
-		type = SecuritySchemeType.HTTP,
-		in = SecuritySchemeIn.HEADER)
-@SecurityScheme(
-		name = "access_token",
-		scheme = "Bearer",
-		type = SecuritySchemeType.HTTP,
-		in = SecuritySchemeIn.HEADER)
-@OpenAPIDefinition(
-		info = @Info(
-				title = "Spring Boot REST API Documentation",
-				description = "Spring boot REST API Documentation",
-				version = "v1.0",
-				contact = @Contact(
-						name = "Your name",
-						email = "your email",
-						url = "url contact your"
-				),
-				license = @License(
-						name = "Apache 2.0",
-						url = "jkdshfjsdhfjd"
-				)
-		),
-		externalDocs = @ExternalDocumentation(
-				description = "",
-				url = ""
-		)
-)
 public class SmartphoneApplication {
 
 	public static void main(String[] args) {

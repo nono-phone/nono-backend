@@ -1,4 +1,4 @@
-package com.vn.aptech.smartphone.dto.response;
+package com.vn.aptech.smartphone.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
