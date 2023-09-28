@@ -26,7 +26,7 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<Category>> get() {
         return ResponseEntity.ok(categoryService.get());
     }
@@ -47,9 +47,10 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.add(category), CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<Category> getById(@RequestParam Long id) {
+    @GetMapping("{id}")
+    public ResponseEntity<Category> getById(@PathVariable Long id) {
         return ResponseEntity.ok(categoryService.getById(id));
+
     }
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("{id}")
@@ -61,6 +62,7 @@ public class CategoryController {
     @DeleteMapping
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteCate(@RequestParam Long id) {
+        categoryService.delete(id);
         categoryService.delete(id);
     }
 
