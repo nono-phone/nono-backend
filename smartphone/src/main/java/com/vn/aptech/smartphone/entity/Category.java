@@ -36,7 +36,7 @@ public class Category extends BaseEntity{
 
     private String description;
 
-    @Column(columnDefinition = "tinyint(1) default 1")
+    @Column(columnDefinition = "tinyint(1)")
     private boolean isEnable = true;
 
     @JsonIgnore

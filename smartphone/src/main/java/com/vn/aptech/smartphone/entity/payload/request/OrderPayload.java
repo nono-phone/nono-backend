@@ -1,6 +1,8 @@
 package com.vn.aptech.smartphone.entity.payload.request;
 
-import com.vn.aptech.smartphone.common.Delivery;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.vn.aptech.smartphone.common.DeliveryMethod;
+import com.vn.aptech.smartphone.common.PaymentType;
 import lombok.*;
 
 import java.util.List;
@@ -16,6 +18,9 @@ public class OrderPayload {
     private String phone;
     private String email;
     private String description;
-    private Delivery type_delivery;
+    private DeliveryMethod type_delivery;
+    private PaymentType paymentType;
+    private boolean isPayment;
+    @JsonProperty(value = "order_details")
     private List<OrderDetailsPayload> orderDetailsPayloadList;
 }

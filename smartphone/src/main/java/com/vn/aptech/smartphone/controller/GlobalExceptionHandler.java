@@ -1,9 +1,7 @@
 package com.vn.aptech.smartphone.controller;
 
 import com.vn.aptech.smartphone.dto.ErrorResponse;
-import com.vn.aptech.smartphone.exception.NotFoundException;
-import com.vn.aptech.smartphone.exception.ConflictException;
-import com.vn.aptech.smartphone.exception.LoginFailedException;
+import com.vn.aptech.smartphone.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -66,6 +64,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ErrorResponse> handleCategoryException(Exception e, WebRequest request) {
         return handleException(e, HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler(NotFoundListProductException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<ErrorResponse> handleNotFoundListProductException(Exception e, WebRequest request) {
+        return handleException(e, HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler(InsufficientStockException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleInsufficientStockException(Exception e, WebRequest request) {
+        return handleException(e, HttpStatus.BAD_REQUEST, request);
     }
 
     private ResponseEntity<ErrorResponse> handleException(Exception e, HttpStatus httpStatus, WebRequest webRequest){

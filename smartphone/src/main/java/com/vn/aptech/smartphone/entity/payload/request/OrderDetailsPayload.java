@@ -1,5 +1,6 @@
 package com.vn.aptech.smartphone.entity.payload.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @Getter
@@ -8,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class OrderDetailsPayload {
-    private Long product_id;
+    @JsonProperty(value = "product_id")
+    private Long productId;
     private int quantity;
-    private double price;
 }

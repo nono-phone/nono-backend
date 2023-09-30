@@ -19,8 +19,8 @@ public class OrderDetails extends BaseEntity {
     private int quantity;
     private double price;
     private double amount;
-    @JsonIgnore
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "order_id")
     private Order order;
 
