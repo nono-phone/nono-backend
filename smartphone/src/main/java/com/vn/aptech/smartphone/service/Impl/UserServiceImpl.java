@@ -1,10 +1,12 @@
 package com.vn.aptech.smartphone.service.Impl;
 
 import com.vn.aptech.smartphone.dto.UserDto;
+import com.vn.aptech.smartphone.dto.UserResponseDto;
 import com.vn.aptech.smartphone.entity.SafeguardUser;
 import com.vn.aptech.smartphone.entity.payload.request.InfoPayload;
 import com.vn.aptech.smartphone.entity.payload.request.ResetPasswordPayload;
 import com.vn.aptech.smartphone.entity.payload.request.UpdateRolePayload;
+import com.vn.aptech.smartphone.exception.ConflictException;
 import com.vn.aptech.smartphone.exception.NotFoundException;
 import com.vn.aptech.smartphone.repository.UserRepository;
 import com.vn.aptech.smartphone.service.UserService;
@@ -65,6 +67,16 @@ public class UserServiceImpl implements UserService {
         return modelMapper.map(saved, UserDto.class);
     }
 
+//    @Override
+//    public SafeguardUser add(SafeguardUser user) {
+//        checkConflictUserEmail(user.getEmail());
+//        SafeguardUser safeguardUser = createSafeguardUser(user);
+//        SafeguardUser saved = userRepository.save(safeguardUser);
+//        cleanLoginAttempt(registerPayload.getEmail());
+//
+//        return modelMapper.map(saved, UserResponseDto.class);
+//    }
+
     @Override
     public List<UserDto> getAll() {
         return userRepository.findAll().stream().map(
@@ -82,5 +94,10 @@ public class UserServiceImpl implements UserService {
                 () -> new NotFoundException(String.format("Not found user with id = %d", userId))
         );
         return user;
+    }
+    private void checkConflictUserEmail(String email) throws ConflictException {
+        if (userRepository.existsByEmail(email)) {
+            throw new ConflictException(String.format("%s is already in use", email));
+        }
     }
 }

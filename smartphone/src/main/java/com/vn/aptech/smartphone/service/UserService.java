@@ -1,6 +1,7 @@
 package com.vn.aptech.smartphone.service;
 
 import com.vn.aptech.smartphone.dto.UserDto;
+import com.vn.aptech.smartphone.entity.SafeguardUser;
 import com.vn.aptech.smartphone.entity.payload.request.InfoPayload;
 import com.vn.aptech.smartphone.entity.payload.request.ResetPasswordPayload;
 import com.vn.aptech.smartphone.entity.payload.request.UpdateRolePayload;
@@ -15,4 +16,6 @@ public interface UserService {
     void disableUser(Long idUser);
     void updatePasswordUser(Long userId, ResetPasswordPayload resetPasswordPayload);
     UserDto updateRoleUser(Long userId, UpdateRolePayload updateRolePayload);
+
+//    SafeguardUser add (SafeguardUser user);
 }

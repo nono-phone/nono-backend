@@ -50,7 +50,10 @@ public class UserController {
 //    }
 
 //    @PostMapping
-//    public ResponseEntity<UserDto> createUser (@RequestBody )
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public ResponseEntity<UserDto> createUser (@RequestBody SafeguardUser user) {
+//        return new ResponseEntity<>(userService.add(user), HttpStatus.CREATED);
+//    }
 
 
     //update user
@@ -97,4 +100,6 @@ public class UserController {
         userService.updateRoleUser(userId, payload);
         return ResponseEntity.ok().build();
     }
+
+
 }
