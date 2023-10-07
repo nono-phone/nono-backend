@@ -33,7 +33,6 @@ public class SafeguardUser extends BaseEntity implements Serializable {
     private Role role;
 
     //@Schema(hidden = true)
-    @JsonIgnore
     @Column(name = "password", length = 60, nullable = false)
     private String password;
 

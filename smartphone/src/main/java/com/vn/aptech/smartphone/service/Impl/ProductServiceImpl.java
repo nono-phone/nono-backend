@@ -10,6 +10,7 @@ import com.vn.aptech.smartphone.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,11 +74,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product add(Product product) {
-        Category category = categoryService.getById(product.getCategories().getId());
-        Product savedProduct = productRepository.save(product);
-        savedProduct.setCategories(category);
-        return savedProduct;
+    public List<Product> add(List<Product> products) {
+        List<Product> savedProducts = new ArrayList<>();
+        for(Product product: products) {
+            checkDuplicate(product.getName());
+            Category category = categoryService.getById(product.getCategories().getId());
+            Product savedProduct = productRepository.save(product);
+            savedProduct.setCategories(category);
+            savedProducts.add(savedProduct);
+        }
+        return savedProducts;
     }
 
     @Override

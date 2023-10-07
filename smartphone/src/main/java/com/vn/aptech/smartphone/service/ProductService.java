@@ -12,6 +12,6 @@ public interface ProductService {
     List<Product> getByCate(Long idCate);
     Product update(Product product,Long idProduct);
     void delete(Long id);
-    Product add(Product product);
+    List<Product> add(List<Product> product);
     List<Product> findAllByStatus(boolean isEnable);
 }

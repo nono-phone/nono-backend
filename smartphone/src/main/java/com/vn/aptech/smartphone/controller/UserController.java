@@ -3,6 +3,7 @@ package com.vn.aptech.smartphone.controller;
 import com.vn.aptech.smartphone.annotation.UserPrincipal;
 import com.vn.aptech.smartphone.dto.UserDto;
 import com.vn.aptech.smartphone.entity.SafeguardUser;
+import com.vn.aptech.smartphone.entity.payload.request.CreateUserPayload;
 import com.vn.aptech.smartphone.entity.payload.request.InfoPayload;
 import com.vn.aptech.smartphone.entity.payload.request.ResetPasswordPayload;
 import com.vn.aptech.smartphone.entity.payload.request.UpdateRolePayload;
@@ -10,6 +11,7 @@ import com.vn.aptech.smartphone.security.AppUserDetails;
 import com.vn.aptech.smartphone.service.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,16 +46,12 @@ public class UserController {
         return new ResponseEntity<>(userService.update(currentUser, infoPayload), HttpStatus.OK);
     }
 
-//    @PutMapping(value = "/udpate-user")
-//    public ResponseEntity<?> updateUser() {
-//        return new ResponseEntity<>(userService.updateUser(currentUser, inf))
-//    }
-
-//    @PostMapping
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public ResponseEntity<UserDto> createUser (@RequestBody SafeguardUser user) {
-//        return new ResponseEntity<>(userService.add(user), HttpStatus.CREATED);
-//    }
+    @SecurityRequirement(name = "access_token")
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> createUser (@RequestBody @NotNull List<SafeguardUser> users) {
+        return new ResponseEntity<>(userService.addListUser(users), HttpStatus.CREATED);
+    }
 
 
     //update user

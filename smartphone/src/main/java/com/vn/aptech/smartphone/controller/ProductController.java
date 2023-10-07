@@ -35,7 +35,7 @@ public class ProductController {
     @SecurityRequirement(name = "access_token")
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Product> create(@RequestBody @Valid Product product) {
+    public ResponseEntity<List<Product>> create(@RequestBody @Valid List<Product> product) {
         return new ResponseEntity<>(productService.add(product), CREATED);
     }
     @GetMapping("/getByCate")
