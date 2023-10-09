@@ -9,6 +9,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class InfoPayload {
+    private String name;
     private String phone;
     private String image;
     private String gender;
