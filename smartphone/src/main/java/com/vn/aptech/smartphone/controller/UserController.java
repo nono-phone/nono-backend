@@ -1,6 +1,7 @@
 package com.vn.aptech.smartphone.controller;
 
 import com.vn.aptech.smartphone.annotation.UserPrincipal;
+import com.vn.aptech.smartphone.dto.UserDetailsDto;
 import com.vn.aptech.smartphone.dto.UserDto;
 import com.vn.aptech.smartphone.entity.SafeguardUser;
 import com.vn.aptech.smartphone.entity.payload.request.CreateUserPayload;
@@ -13,6 +14,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,6 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final ModelMapper modelMapper;
     @SecurityRequirement(name = "access_token")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/get-all")
@@ -65,10 +68,11 @@ public class UserController {
     @SecurityRequirement(name = "access_token")
     @GetMapping("/me")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> getMyProfiles(@UserPrincipal AppUserDetails currentUser) {
+    public ResponseEntity<UserDetailsDto> getMyProfiles(@UserPrincipal AppUserDetails currentUser) {
         if(currentUser != null) {
             SafeguardUser user = currentUser.getSafeguardUser();
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            UserDetailsDto userInfo = modelMapper.map(user, UserDetailsDto.class);
+            return new ResponseEntity<>(userInfo, HttpStatus.OK);
         }
         return ResponseEntity.noContent().build();
     }
