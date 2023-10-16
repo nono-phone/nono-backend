@@ -17,6 +17,8 @@ public interface UserService {
     void updatePasswordUser(Long userId, ResetPasswordPayload resetPasswordPayload);
     UserDto updateRoleUser(Long userId, UpdateRolePayload updateRolePayload);
 
+    UserDto updateUserByAdmin(UserDto userDto, Long id);
+
     List<SafeguardUser> addListUser (List<SafeguardUser> users);
 
 //    SafeguardUser add (SafeguardUser user);

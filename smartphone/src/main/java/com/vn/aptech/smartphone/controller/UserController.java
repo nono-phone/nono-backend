@@ -56,14 +56,12 @@ public class UserController {
         return new ResponseEntity<>(userService.addListUser(users), HttpStatus.CREATED);
     }
 
-
-    //update user
-
-    //disable user
-//    @PutMapping(value = "/update-user")
-//    public ResponseEntity<UserDto> updateUser(UserDto userDto) {
-//        return new ResponseEntity<>(userService.updateUser(userDto), HttpStatus.OK);
-//    }
+    @SecurityRequirement(name = "access_token")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping(value = "/update-user/{id}")
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, @PathVariable Long id) {
+        return new ResponseEntity<>(userService.updateUserByAdmin(userDto, id), HttpStatus.OK);
+    }
 
     @SecurityRequirement(name = "access_token")
     @GetMapping("/me")

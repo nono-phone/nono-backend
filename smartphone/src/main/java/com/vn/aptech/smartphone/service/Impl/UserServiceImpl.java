@@ -72,6 +72,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto updateUserByAdmin(UserDto userDto, Long id) {
+        SafeguardUser user = findUserById(id);
+        user.setName(userDto.getName());
+        user.setStatus(userDto.getStatus());
+        user.setGender(userDto.getGender());
+        user.setPhone(userDto.getPhone());
+        user.setImage(userDto.getImage());
+        user.setDateOfBirth(userDto.getDateOfBirth());
+        user.setRole(userDto.getRole());
+        return modelMapper.map(userRepository.save(user), UserDto.class);
+    }
+
+    @Override
     public List<SafeguardUser> addListUser(List<SafeguardUser> users) {
         List<SafeguardUser> savedUsers = new ArrayList<>();
         for (SafeguardUser user: users) {

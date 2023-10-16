@@ -65,15 +65,15 @@ public class AccessTokenProvider implements TokenProvider {
     }
 
     private PrivateKey getAccessPrivateKey() {
-        KeyFactory keyFactory;
-        try {
-            keyFactory = KeyFactory.getInstance("RSA");
-            byte[] decode = Base64.getDecoder().decode(this.accessPrivateKey);
-            PKCS8EncodedKeySpec keySpecPKCS8 = new PKCS8EncodedKeySpec(decode);
-            return keyFactory.generatePrivate(keySpecPKCS8);
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new ApplicationException(e.getMessage());
-        }
+            KeyFactory keyFactory;
+            try {
+                keyFactory = KeyFactory.getInstance("RSA");
+                byte[] decode = Base64.getDecoder().decode(this.accessPrivateKey);
+                PKCS8EncodedKeySpec keySpecPKCS8 = new PKCS8EncodedKeySpec(decode);
+                return keyFactory.generatePrivate(keySpecPKCS8);
+            } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+                throw new ApplicationException(e.getMessage());
+            }
     }
 
 

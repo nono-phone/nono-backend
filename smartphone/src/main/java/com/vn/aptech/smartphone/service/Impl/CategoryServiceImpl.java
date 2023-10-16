@@ -43,7 +43,7 @@ public class CategoryServiceImpl implements CategoryService {
                     if (category.getImage() != null) {
                         cate.setImage(category.getImage());
                     }
-                    if (category.isEnable()) {
+                    if (!category.isEnable()) {
                         cate.setEnable(category.isEnable());
                     }
                     return repository.save(cate);

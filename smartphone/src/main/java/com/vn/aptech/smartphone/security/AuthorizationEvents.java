@@ -24,7 +24,7 @@ public class AuthorizationEvents {
     public void onFailure(AuthorizationDeniedEvent failure) {
         // ...
         Supplier<Authentication> authentication = failure.getAuthentication();
-        log.info("onSuccess(AuthenticationSuccessEvent");
-        log.info("onSuccess(AuthenticationSuccessEvent{}", authentication);
+        log.info("onSuccess(AuthenticationFailedEvent");
+        log.info("onSuccess(AuthenticationFailedEvent{}", authentication);
     }
 }
